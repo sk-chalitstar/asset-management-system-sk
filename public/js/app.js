@@ -979,6 +979,9 @@ function renderAssetsTable() {
             <button onclick="viewAssetDetails('${a.id}')" title="ดูข้อมูลและประวัติ" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-blue-100 hover:text-blue-600 text-slate-600 transition flex items-center justify-center">
               <i class="fa-solid fa-eye text-xs"></i>
             </button>
+            <button onclick="printAssetCard('${a.id}')" title="พิมพ์บัตรประวัติทรัพย์สิน (IT Asset Card)" class="w-8 h-8 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-600 transition flex items-center justify-center">
+              <i class="fa-solid fa-print text-xs"></i>
+            </button>
             <button onclick="openPrintLabelModal('${a.id}')" title="พิมพ์ QR Code / ป้ายทรัพย์สิน" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-purple-100 hover:text-purple-600 text-slate-600 transition flex items-center justify-center">
               <i class="fa-solid fa-qrcode text-xs"></i>
             </button>
@@ -1206,6 +1209,13 @@ function viewAssetDetails(id) {
     openReportRepairFromAsset(asset.id);
   };
 
+  const printCardBtn = document.getElementById('viewAssetPrintCardBtn');
+  if (printCardBtn) {
+    printCardBtn.onclick = () => {
+      printAssetCard(asset.id);
+    };
+  }
+
   document.getElementById('viewAssetPrintLabelBtn').onclick = () => {
     closeViewAssetModal();
     openPrintLabelModal(asset.id);
@@ -1216,6 +1226,141 @@ function viewAssetDetails(id) {
 
 function closeViewAssetModal() {
   document.getElementById('viewAssetModal').classList.add('hidden');
+}
+
+// IT Asset Card A4 Printable Generator
+function printAssetCard(assetId) {
+  const asset = appState.assets.find(a => a.id === assetId);
+  if (!asset) return;
+
+  const printArea = document.getElementById('printableArea');
+  if (!printArea) return;
+
+  const brandModel = [(asset.brand || '').trim(), (asset.model || '').trim()].filter(Boolean).join(' ') || '-';
+  const purchasePriceText = `${asset.purchaseDate || '-'} (฿${(asset.price || 0).toLocaleString('th-TH')})`;
+  const imageHtml = asset.imageUrl 
+    ? `<img src="${asset.imageUrl}" alt="${asset.name}" style="max-width: 100%; max-height: 250px; object-fit: contain; border-radius: 8px;" onerror="this.onerror=null;this.parentElement.innerHTML='<div style=\\'text-align:center;color:#94a3b8;font-size:12px;\\'>รูปภาพไม่พร้อมใช้งาน</div>';">`
+    : `<div style="text-align:center;color:#94a3b8;padding:20px 10px;">
+        <i class="${getCategoryIcon(asset.category)}" style="font-size: 52px; margin-bottom: 10px; display: block; color: #cbd5e1;"></i>
+        <span style="font-size: 13px; color: #94a3b8;">ไม่มีรูปถ่ายอุปกรณ์</span>
+       </div>`;
+
+  printArea.innerHTML = `
+    <div style="max-width: 820px; margin: 0 auto; padding: 25px 30px; font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; color: #000; background: #ffffff;">
+      
+      <!-- 1. Header Section -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <div>
+          <h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #000; letter-spacing: -0.3px;">
+            บัตรประวัติและข้อมูลทรัพย์สิน IT (IT Asset Card)
+          </h2>
+          <p style="margin: 4px 0 0 0; font-size: 13.5px; color: #334155; font-weight: 500;">
+            ระบบบริหารจัดการทรัพย์สินเทคโนโลยีสารสนเทศ
+          </p>
+        </div>
+        <div style="border: 2px solid #000; border-radius: 8px; padding: 6px 18px; font-weight: 700; font-size: 16px; font-family: 'Prompt', monospace; text-align: center; min-width: 130px;">
+          ${asset.assetCode || '-'}
+        </div>
+      </div>
+
+      <!-- Header Solid Divider Line -->
+      <div style="border-bottom: 2.5px solid #000; margin-bottom: 22px;"></div>
+
+      <!-- 2. Main Info Card (Image on left, Information Grid on right) -->
+      <div style="border: 1.5px solid #94a3b8; border-radius: 12px; padding: 18px 22px; display: flex; gap: 26px; margin-bottom: 18px; align-items: stretch; background: #ffffff;">
+        
+        <!-- Photo Container Box -->
+        <div style="width: 250px; min-width: 250px; height: 260px; border: 1.5px solid #cbd5e1; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8fafc; padding: 6px;">
+          ${imageHtml}
+        </div>
+
+        <!-- Details Grid -->
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 13.5px; line-height: 1.55;">
+          
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">ชื่ออุปกรณ์:</span>
+            <span style="flex: 1; font-weight: 700; color: #000;">${asset.name || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">หมวดหมู่:</span>
+            <span style="flex: 1; color: #1e293b;">${asset.category || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">ยี่ห้อ / รุ่น:</span>
+            <span style="flex: 1; color: #1e293b;">${brandModel}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">Serial Number (S/N):</span>
+            <span style="flex: 1; color: #1e293b; font-family: monospace;">${asset.serialNumber || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">แผนกที่ใช้งาน:</span>
+            <span style="flex: 1; font-weight: 700; color: #000;">${asset.department || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">ผู้ถือครองใช้งาน:</span>
+            <span style="flex: 1; color: #1e293b;">${asset.assignedUser || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">สถานที่ตั้ง:</span>
+            <span style="flex: 1; color: #1e293b;">${asset.location || '-'}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 5px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">วันที่จัดซื้อ / ราคา:</span>
+            <span style="flex: 1; color: #1e293b;">${purchasePriceText}</span>
+          </div>
+
+          <div style="display: flex; margin-bottom: 2px;">
+            <span style="width: 155px; color: #000; font-weight: 700;">สถานะปัจจุบัน:</span>
+            <span style="flex: 1; font-weight: 700; color: #000;">${asset.status || 'ใช้งานได้ปกติ'}</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 3. Technical Specs Box -->
+      <div style="border: 1.5px solid #94a3b8; border-radius: 10px; padding: 14px 18px; margin-bottom: 45px; background: #ffffff;">
+        <div style="font-weight: 700; font-size: 13.5px; color: #000; margin-bottom: 6px;">
+          สเปกและรายละเอียดทางเทคนิค:
+        </div>
+        <div style="font-size: 13px; color: #1e293b; min-height: 24px; white-space: pre-wrap; line-height: 1.5;">
+          ${asset.notes || '-'}
+        </div>
+      </div>
+
+      <!-- 4. Signatures Section -->
+      <div style="display: flex; justify-content: space-around; align-items: flex-start; text-align: center; margin-top: 55px; font-size: 13px;">
+        
+        <!-- User Signature Block -->
+        <div style="width: 42%;">
+          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 10px auto; height: 1px;"></div>
+          <div style="font-weight: 700; color: #000; margin-bottom: 4px;">ลงชื่อผู้ถือครองทรัพย์สิน</div>
+          <div style="color: #64748b; margin-bottom: 6px;">(....................................................)</div>
+          <div style="color: #64748b; font-size: 12px;">วันที่ ......./......./.......</div>
+        </div>
+
+        <!-- IT Staff Signature Block -->
+        <div style="width: 42%;">
+          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 10px auto; height: 1px;"></div>
+          <div style="font-weight: 700; color: #000; margin-bottom: 4px;">ลงชื่อเจ้าหน้าที่ฝ่าย IT</div>
+          <div style="color: #64748b; margin-bottom: 6px;">(....................................................)</div>
+          <div style="color: #64748b; font-size: 12px;">วันที่ ......./......./.......</div>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+  window.print();
 }
 
 function openPrintLabelModal(assetId) {
