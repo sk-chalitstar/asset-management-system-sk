@@ -19,7 +19,7 @@ echo.
 
 echo [*] Staging and committing files...
 git add .
-git commit -m "Asset and Maintenance System - Complete with Cloud Database and Reports" >nul 2>&1
+git commit -m "Remove demo login buttons and update system" >nul 2>&1
 git branch -M main
 
 echo.
