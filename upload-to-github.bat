@@ -19,7 +19,7 @@ echo.
 
 echo [*] Staging and committing files...
 git add .
-git commit -m "Add IT Asset Card print feature and clean login page" >nul 2>&1
+git commit -m "Fix print layout to single A4 page and clean header text" >nul 2>&1
 git branch -M main
 
 echo.

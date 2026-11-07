@@ -1246,79 +1246,79 @@ function printAssetCard(assetId) {
        </div>`;
 
   printArea.innerHTML = `
-    <div style="max-width: 820px; margin: 0 auto; padding: 25px 30px; font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; color: #000; background: #ffffff;">
+    <div style="max-width: 820px; margin: 0 auto; padding: 15px 25px 0 25px; font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; color: #000; background: #ffffff; box-sizing: border-box;">
       
       <!-- 1. Header Section -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
         <div>
-          <h2 style="margin: 0; font-size: 22px; font-weight: 700; color: #000; letter-spacing: -0.3px;">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 700; color: #000; letter-spacing: -0.3px;">
             บัตรประวัติและข้อมูลทรัพย์สิน IT (IT Asset Card)
           </h2>
-          <p style="margin: 4px 0 0 0; font-size: 13.5px; color: #334155; font-weight: 500;">
+          <p style="margin: 3px 0 0 0; font-size: 13px; color: #334155; font-weight: 500;">
             ระบบบริหารจัดการทรัพย์สินเทคโนโลยีสารสนเทศ
           </p>
         </div>
-        <div style="border: 2px solid #000; border-radius: 8px; padding: 6px 18px; font-weight: 700; font-size: 16px; font-family: 'Prompt', monospace; text-align: center; min-width: 130px;">
+        <div style="border: 2px solid #000; border-radius: 8px; padding: 4px 16px; font-weight: 700; font-size: 15px; font-family: 'Prompt', monospace; text-align: center; min-width: 120px;">
           ${asset.assetCode || '-'}
         </div>
       </div>
 
       <!-- Header Solid Divider Line -->
-      <div style="border-bottom: 2.5px solid #000; margin-bottom: 22px;"></div>
+      <div style="border-bottom: 2px solid #000; margin-bottom: 16px;"></div>
 
       <!-- 2. Main Info Card (Image on left, Information Grid on right) -->
-      <div style="border: 1.5px solid #94a3b8; border-radius: 12px; padding: 18px 22px; display: flex; gap: 26px; margin-bottom: 18px; align-items: stretch; background: #ffffff;">
+      <div style="border: 1.5px solid #94a3b8; border-radius: 12px; padding: 14px 18px; display: flex; gap: 22px; margin-bottom: 14px; align-items: stretch; background: #ffffff;">
         
         <!-- Photo Container Box -->
-        <div style="width: 250px; min-width: 250px; height: 260px; border: 1.5px solid #cbd5e1; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8fafc; padding: 6px;">
+        <div style="width: 230px; min-width: 230px; height: 230px; border: 1.5px solid #cbd5e1; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8fafc; padding: 4px;">
           ${imageHtml}
         </div>
 
         <!-- Details Grid -->
-        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 13.5px; line-height: 1.55;">
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; font-size: 13px; line-height: 1.5;">
           
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">ชื่ออุปกรณ์:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">ชื่ออุปกรณ์:</span>
             <span style="flex: 1; font-weight: 700; color: #000;">${asset.name || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">หมวดหมู่:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">หมวดหมู่:</span>
             <span style="flex: 1; color: #1e293b;">${asset.category || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">ยี่ห้อ / รุ่น:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">ยี่ห้อ / รุ่น:</span>
             <span style="flex: 1; color: #1e293b;">${brandModel}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">Serial Number (S/N):</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">Serial Number (S/N):</span>
             <span style="flex: 1; color: #1e293b; font-family: monospace;">${asset.serialNumber || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">แผนกที่ใช้งาน:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">แผนกที่ใช้งาน:</span>
             <span style="flex: 1; font-weight: 700; color: #000;">${asset.department || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">ผู้ถือครองใช้งาน:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">ผู้ถือครองใช้งาน:</span>
             <span style="flex: 1; color: #1e293b;">${asset.assignedUser || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">สถานที่ตั้ง:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">สถานที่ตั้ง:</span>
             <span style="flex: 1; color: #1e293b;">${asset.location || '-'}</span>
           </div>
 
-          <div style="display: flex; margin-bottom: 5px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">วันที่จัดซื้อ / ราคา:</span>
+          <div style="display: flex; margin-bottom: 4px;">
+            <span style="width: 150px; color: #000; font-weight: 700;">วันที่จัดซื้อ / ราคา:</span>
             <span style="flex: 1; color: #1e293b;">${purchasePriceText}</span>
           </div>
 
           <div style="display: flex; margin-bottom: 2px;">
-            <span style="width: 155px; color: #000; font-weight: 700;">สถานะปัจจุบัน:</span>
+            <span style="width: 150px; color: #000; font-weight: 700;">สถานะปัจจุบัน:</span>
             <span style="flex: 1; font-weight: 700; color: #000;">${asset.status || 'ใช้งานได้ปกติ'}</span>
           </div>
 
@@ -1327,32 +1327,32 @@ function printAssetCard(assetId) {
       </div>
 
       <!-- 3. Technical Specs Box -->
-      <div style="border: 1.5px solid #94a3b8; border-radius: 10px; padding: 14px 18px; margin-bottom: 45px; background: #ffffff;">
-        <div style="font-weight: 700; font-size: 13.5px; color: #000; margin-bottom: 6px;">
+      <div style="border: 1.5px solid #94a3b8; border-radius: 10px; padding: 12px 16px; margin-bottom: 28px; background: #ffffff;">
+        <div style="font-weight: 700; font-size: 13px; color: #000; margin-bottom: 4px;">
           สเปกและรายละเอียดทางเทคนิค:
         </div>
-        <div style="font-size: 13px; color: #1e293b; min-height: 24px; white-space: pre-wrap; line-height: 1.5;">
+        <div style="font-size: 12.5px; color: #1e293b; min-height: 20px; white-space: pre-wrap; line-height: 1.45;">
           ${asset.notes || '-'}
         </div>
       </div>
 
       <!-- 4. Signatures Section -->
-      <div style="display: flex; justify-content: space-around; align-items: flex-start; text-align: center; margin-top: 55px; font-size: 13px;">
+      <div style="display: flex; justify-content: space-around; align-items: flex-start; text-align: center; margin-top: 35px; font-size: 12.5px;">
         
         <!-- User Signature Block -->
         <div style="width: 42%;">
-          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 10px auto; height: 1px;"></div>
+          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 8px auto; height: 1px;"></div>
           <div style="font-weight: 700; color: #000; margin-bottom: 4px;">ลงชื่อผู้ถือครองทรัพย์สิน</div>
-          <div style="color: #64748b; margin-bottom: 6px;">(....................................................)</div>
-          <div style="color: #64748b; font-size: 12px;">วันที่ ......./......./.......</div>
+          <div style="color: #64748b; margin-bottom: 5px;">(....................................................)</div>
+          <div style="color: #64748b; font-size: 11.5px;">วันที่ ......./......./.......</div>
         </div>
 
         <!-- IT Staff Signature Block -->
         <div style="width: 42%;">
-          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 10px auto; height: 1px;"></div>
+          <div style="border-bottom: 1.5px solid #64748b; width: 85%; margin: 0 auto 8px auto; height: 1px;"></div>
           <div style="font-weight: 700; color: #000; margin-bottom: 4px;">ลงชื่อเจ้าหน้าที่ฝ่าย IT</div>
-          <div style="color: #64748b; margin-bottom: 6px;">(....................................................)</div>
-          <div style="color: #64748b; font-size: 12px;">วันที่ ......./......./.......</div>
+          <div style="color: #64748b; margin-bottom: 5px;">(....................................................)</div>
+          <div style="color: #64748b; font-size: 11.5px;">วันที่ ......./......./.......</div>
         </div>
 
       </div>
