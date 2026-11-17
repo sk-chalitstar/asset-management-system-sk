@@ -663,20 +663,32 @@ function populateDepartmentSelects() {
 
   const filterDept = document.getElementById('assetFilterDept');
   if (filterDept) {
+    const curVal = filterDept.value || 'all';
     filterDept.innerHTML = `<option value="all">ทุกแผนก (${appState.assets.length} ชิ้น)</option>` +
       depts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+    if (depts.some(d => d.name === curVal) || curVal === 'all') {
+      filterDept.value = curVal;
+    }
   }
 
   const repairFilterDept = document.getElementById('repairFilterDept');
   if (repairFilterDept) {
+    const curVal = repairFilterDept.value || 'all';
     repairFilterDept.innerHTML = `<option value="all">ทุกแผนก</option>` +
       depts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+    if (depts.some(d => d.name === curVal) || curVal === 'all') {
+      repairFilterDept.value = curVal;
+    }
   }
 
   const reportFilterDept = document.getElementById('reportFilterDept');
   if (reportFilterDept) {
+    const curVal = reportFilterDept.value || 'all';
     reportFilterDept.innerHTML = `<option value="all">-- ทุกแผนก --</option>` +
       depts.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+    if (depts.some(d => d.name === curVal) || curVal === 'all') {
+      reportFilterDept.value = curVal;
+    }
   }
 
   const assetModalDept = document.getElementById('assetModalDept');
@@ -874,7 +886,7 @@ function renderRecentRepairsList() {
 // =========================================================================
 
 function handleAssetSearch(val) {
-  appState.assetFilter.search = val.toLowerCase().trim();
+  appState.assetFilter.search = (val || '').toLowerCase().trim();
   renderAssetsTable();
 }
 
@@ -895,22 +907,36 @@ function handleAssetFilterStatus(st) {
 
 function getFilteredAssets() {
   const { search, department, category, status } = appState.assetFilter;
+  const searchTerms = search ? search.split(/\s+/).filter(Boolean) : [];
+
   return appState.assets.filter(a => {
-    if (department !== 'all' && a.department !== department) return false;
-    if (category !== 'all' && a.category !== category) return false;
-    if (status !== 'all' && a.status !== status) return false;
-    if (search) {
-      const matchCode = (a.assetCode || '').toLowerCase().includes(search);
-      const matchName = (a.name || '').toLowerCase().includes(search);
-      const matchBrand = (a.brand || '').toLowerCase().includes(search);
-      const matchModel = (a.model || '').toLowerCase().includes(search);
-      const matchSerial = (a.serialNumber || '').toLowerCase().includes(search);
-      const matchUser = (a.assignedUser || '').toLowerCase().includes(search);
-      const matchLoc = (a.location || '').toLowerCase().includes(search);
-      if (!matchCode && !matchName && !matchBrand && !matchModel && !matchSerial && !matchUser && !matchLoc) {
-        return false;
-      }
+    if (!a) return false;
+    if (department && department !== 'all' && (a.department || '').trim() !== department.trim()) return false;
+    if (category && category !== 'all' && (a.category || '').trim() !== category.trim()) return false;
+    if (status && status !== 'all' && (a.status || '').trim() !== status.trim()) return false;
+
+    if (searchTerms.length > 0) {
+      // Build searchable haystack
+      const haystack = [
+        a.assetCode,
+        a.id,
+        a.name,
+        a.brand,
+        a.model,
+        a.serialNumber,
+        a.assignedUser,
+        a.department,
+        a.location,
+        a.category,
+        a.status,
+        a.notes
+      ].map(v => (v !== null && v !== undefined ? String(v) : '').toLowerCase()).join(' ');
+
+      // Each search term must be found in haystack
+      const matchAllTerms = searchTerms.every(term => haystack.includes(term));
+      if (!matchAllTerms) return false;
     }
+
     return true;
   });
 }
@@ -1433,7 +1459,7 @@ function getRepairIconBg(st) {
 }
 
 function handleRepairSearch(val) {
-  appState.repairFilter.search = val.toLowerCase().trim();
+  appState.repairFilter.search = (val || '').toLowerCase().trim();
   renderRepairsTable();
 }
 
@@ -1449,20 +1475,31 @@ function handleRepairFilterDept(dept) {
 
 function getFilteredRepairs() {
   const { search, status, department } = appState.repairFilter;
+  const searchTerms = search ? search.split(/\s+/).filter(Boolean) : [];
+
   return appState.repairs.filter(r => {
-    if (status !== 'all' && r.status !== status) return false;
-    if (department !== 'all' && r.department !== department) return false;
-    if (search) {
-      const matchCode = (r.repairCode || '').toLowerCase().includes(search);
-      const matchAsset = (r.assetCode || '').toLowerCase().includes(search);
-      const matchName = (r.assetName || '').toLowerCase().includes(search);
-      const matchProblem = (r.problemTitle || '').toLowerCase().includes(search);
-      const matchReporter = (r.reporterName || '').toLowerCase().includes(search);
-      const matchTech = (r.technicianName || '').toLowerCase().includes(search);
-      if (!matchCode && !matchAsset && !matchName && !matchProblem && !matchReporter && !matchTech) {
-        return false;
-      }
+    if (!r) return false;
+    if (status && status !== 'all' && (r.status || '').trim() !== status.trim()) return false;
+    if (department && department !== 'all' && (r.department || '').trim() !== department.trim()) return false;
+
+    if (searchTerms.length > 0) {
+      const haystack = [
+        r.repairCode,
+        r.assetCode,
+        r.assetName,
+        r.problemTitle,
+        r.problemDesc,
+        r.reporterName,
+        r.technicianName,
+        r.department,
+        r.repairDetails,
+        r.status
+      ].map(v => (v !== null && v !== undefined ? String(v) : '').toLowerCase()).join(' ');
+
+      const matchAllTerms = searchTerms.every(term => haystack.includes(term));
+      if (!matchAllTerms) return false;
     }
+
     return true;
   });
 }
